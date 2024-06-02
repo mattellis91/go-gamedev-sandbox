@@ -11,7 +11,7 @@
 	"iid": "c9095c60-fec0-11ee-92f3-d944381be30d",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 6,
+	"nextUid": 5,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -161,8 +161,8 @@
 			"spacing": 0,
 			"padding": 0,
 			"tags": [],
-			"tagsSourceEnumUid": 5,
-			"enumTags": [{ "enumValueId": "Solid", "tileIds": [6,7,8,28,30,50,51,52] }],
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
@@ -170,7 +170,7 @@
 				"averageColors": "f677f566f778f445f5560000f682f782f783fb65fb650000f965fa75f965fa6500004a954984498500000000f566f223f566f556f4450000fa65fb65fb65f974f9740000f965fa75fb86fa54000058655965586500000000f778f566f677000000000000fa65fa65fa650000000000000000f834f954f9440000456645664566000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f854f744f854f644f6440000fb74fc74fb74f944f9440000f889f899f889f8890000fb44fc44fc44fc44fc44f744f223f744f644f6440000f944f944f944fa54fa540000f778f899f89af89a0000fb34fc44fc44fc44fc44f854f744f854000000000000f944f944f9440000000000000000f788f889f8890000fa34fb34fb44000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f376f265f376f244f2440000fc69fc79fc79fc96fc960000fc74fc74fc74fc740000fcb4fcb3fcb5fcb50000f265f223f265f244f2440000fb96fc96fc96fc88fc880000fc74fc74fc74fc740000fca5fcb5fcb5fcb30000f376f265f376000000000000fb86fb96fb860000000000000000fc74fc74fc7400000000fcb4fdb5fcb50000"
 			}
 		}
-	], "enums": [{ "identifier": "Enum", "uid": 5, "values": [{ "id": "Solid", "tileRect": null, "color": 12470831 }], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
+	], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",

@@ -1,4 +1,4 @@
-package blankproject
+package platformer
 
 import (
 	"bytes"

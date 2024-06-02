@@ -17,12 +17,27 @@ const (
 	tileSize = 16
 )
 
+const (
+	EMPTY = -1
+	GRASS_TL = 6
+	GRASS_TM = 7
+	GRASS_TR = 8
+	GROUND_TL = 28
+	GROUND_TM = 29
+	GROUND_TR = 30
+)
+
 var (
 	tilesImage *ebiten.Image
 	ldtkProject *ldtk.Project
 )
 
-func init() {
+type GameScene struct {
+	testLevel *ldtk.Level
+	player *Player
+}
+
+func loadResources() {
 	img, _, err := image.Decode(bytes.NewReader(tiles.Tiles_png))
 	if err != nil {
 		log.Fatal(err)
@@ -34,26 +49,20 @@ func init() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Project: %v\n", ldtkProject)
+	fmt.Printf("Project: %+v\n", ldtkProject.Levels[0].Layers[0])
 }
-
-type GameScene struct {
-	
-}
-
 
 const (
-	EMPTY = -1
-	GRASS_TL = 6
-	GRASS_TM = 7
-	GRASS_TR = 8
-	GROUND_TL = 28
-	GROUND_TM = 29
-	GROUND_TR = 30
+	TILES_LAYER = "Game tiles"
+	ENTITIES_LAYER = "Entities"
 )
 
 func NewGameScene() *GameScene {
+	loadResources()
+	sceneLevel := ldtkProject.Levels[0]
 	return &GameScene{
+		testLevel: sceneLevel,
+		player: NewPlayer(),
 	}
 }
 
@@ -62,5 +71,24 @@ func (s *GameScene) Update(state *GameState) error {
 }
 
 func (s *GameScene) Draw(screen *ebiten.Image) {
+
+	for _, layer := range s.testLevel.Layers {
+		if len(layer.Tiles) > 0 {
+			for _, tile := range layer.Tiles {
+				op := &ebiten.DrawImageOptions{}
+				tilePos := tile.Position
+				tileSubImagePos :=  tile.Src
+				op.GeoM.Translate(float64(tilePos[0]), float64(tilePos[1]))
+				screen.DrawImage(tilesImage.SubImage(
+					image.Rect(tileSubImagePos[0], tileSubImagePos[1], tileSubImagePos[0] + tileSize, tileSubImagePos[1] + tileSize)).(*ebiten.Image),
+				op)
+			}
+		}
+	}
+
+	s.player.Draw(screen)
+
+
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))
+
 }

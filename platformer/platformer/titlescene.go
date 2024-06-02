@@ -12,10 +12,6 @@ type TitleScene struct {
 	count int
 }
 
-func init() {
-
-}
-
 func anyGamepadVirtualButtonJustPressed(i *Input) bool {
 	if !i.gamepadConfig.IsGamepadIDInitialized() {
 		return false

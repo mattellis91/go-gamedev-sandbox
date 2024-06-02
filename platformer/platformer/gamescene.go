@@ -9,7 +9,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer/platformer/resources/tiles"
-	"github.com/mattellis91/go-gamedev-sandbox/platformer/platformer/resources/ldtk"
+	"github.com/mattellis91/go-gamedev-sandbox/platformer/platformer/resources/levels"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer/platformer/ldtk"
 )
 
@@ -48,8 +48,6 @@ func loadResources() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("Project: %+v\n", ldtkProject.Levels[0].Layers[0])
 }
 
 const (
@@ -59,18 +57,38 @@ const (
 
 func NewGameScene() *GameScene {
 	loadResources()
+	
 	sceneLevel := ldtkProject.Levels[0]
+
+	var playerEntity *ldtk.Entity
+
+	for _, l := range sceneLevel.Layers {
+		if l.Identifier == ENTITIES_LAYER {
+			for _, e := range l.Entities {
+				if e.Identifier == "Player" {
+					playerEntity = e
+				}
+			}
+		}
+	}
+
+	fmt.Printf("Player entity: %+v\n", playerEntity)
+
 	return &GameScene{
 		testLevel: sceneLevel,
-		player: NewPlayer(),
+		player: NewPlayer(playerEntity.Position[0], playerEntity.Position[1] + 4),
 	}
 }
 
 func (s *GameScene) Update(state *GameState) error {
+	s.player.Update()
 	return nil
 }
 
 func (s *GameScene) Draw(screen *ebiten.Image) {
+
+
+	s.player.Draw(screen)
 
 	for _, layer := range s.testLevel.Layers {
 		if len(layer.Tiles) > 0 {
@@ -86,7 +104,6 @@ func (s *GameScene) Draw(screen *ebiten.Image) {
 		}
 	}
 
-	s.player.Draw(screen)
 
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))

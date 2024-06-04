@@ -6,7 +6,7 @@ import (
 
 const (
 	ScreenWidth  = 640
-	ScreenHeight = 368
+	ScreenHeight = 360
 )
 
 const (
@@ -14,15 +14,6 @@ const (
 	WINDOWSIZE  = 256
 	WINDOWSCALE = 3
 	TILESIZE    = 16
-)
-
-const (
-	GRAVITY        = 5
-	JUMP_SPEED     = -6.5
-	MAX_SPEED      = 25
-	ACCELERATION   = 15
-	MAX_FALL_SPEED = GRAVITY
-	FRICTION       = 8
 )
 
 type Game struct {

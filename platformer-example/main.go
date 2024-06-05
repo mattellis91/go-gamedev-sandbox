@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime/pprof"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/mattellis91/go-gamedev-sandbox/platformer/platformer"
+	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer"
 )
 
 var cpuProfile = flag.String("cpuprofile", "", "write cpu profile to file")

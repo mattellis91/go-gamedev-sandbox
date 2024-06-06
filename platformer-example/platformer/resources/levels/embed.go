@@ -5,6 +5,6 @@ import (
 )
 
 var (
-	//go:embed platformer.ldtk
-	Platformer_ldtk []byte
+	//go:embed dungeon.ldtk
+	Dungeon_ldtk []byte
 )

@@ -28,13 +28,13 @@ func anyGamepadVirtualButtonJustPressed(i *Input) bool {
 func (s *TitleScene) Update(state *GameState) error {
 	s.count++
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
-		state.SceneManager.GoTo(NewGameScene())
+		state.SceneManager.GoTo(NewGameScene("level1"))
 		println("Space pressed")
 		return nil
 	}
 
 	if anyGamepadVirtualButtonJustPressed(state.Input) {
-		state.SceneManager.GoTo(NewGameScene())
+		state.SceneManager.GoTo(NewGameScene("level1"))
 		return nil
 	}
 

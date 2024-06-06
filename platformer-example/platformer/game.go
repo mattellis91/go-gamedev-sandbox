@@ -1,6 +1,10 @@
 package platformer
 
 import (
+
+	"fmt"
+	
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -40,4 +44,8 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.sceneManager.Draw(screen)
+	msg := fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS())
+	msg2 := fmt.Sprintf("FPS: %0.2f", ebiten.ActualFPS())
+	ebitenutil.DebugPrint(screen, msg)
+	ebitenutil.DebugPrintAt(screen, msg2, 0, 20)
 }

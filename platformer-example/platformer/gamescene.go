@@ -2,10 +2,12 @@ package platformer
 
 import (
 
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/ldtk"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/level"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/resources/levels"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	
 )
 
 type GameScene struct {

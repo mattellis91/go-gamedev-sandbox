@@ -3,13 +3,13 @@ package level
 import (
 	"bytes"
 	"fmt"
-	_ "fmt"
 	"image"
-	_ "image/color"
+	"image/color"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	_ "github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/ldtk"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/resources/tiles"
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/util"
@@ -30,6 +30,7 @@ type GameLevel struct {
 	levelTiles []*ldtk.Tile
 	levelEntities []Entity
 	tileSet    *ebiten.Image
+	drawDebug  bool
 }
 
 type Entity interface {
@@ -51,6 +52,11 @@ func NewGameLevel(gameData *ldtk.Project) *GameLevel {
 }
 
 func (g *GameLevel) Update() error {
+
+	if inpututil.IsKeyJustPressed(ebiten.KeyD) {
+		g.drawDebug = !g.drawDebug
+	}
+
 	for _, entity := range g.levelEntities {
 		entity.Update()
 	}
@@ -58,12 +64,17 @@ func (g *GameLevel) Update() error {
 }
 
 func (g *GameLevel) Draw(screen *ebiten.Image) {
-	// for _, obj := range g.levelSpace.Objects() {
-	// 	// Draw the solid tile
-	// 	ops := &ebiten.DrawImageOptions{}
-	// 	ops.GeoM.Translate(float64(obj.Position.X), float64(obj.Position.Y))
-	// 	vector.DrawFilledRect(screen, float32(obj.Position.X), float32(obj.Position.Y), float32(util.TileSize), float32(util.TileSize), color.RGBA{255, 50, 100, 0}, false)
-	// }
+
+	if g.drawDebug {
+
+		for _, obj := range g.levelSpace.Objects() {
+			// Draw the solid tile
+			ops := &ebiten.DrawImageOptions{}
+			ops.GeoM.Translate(float64(obj.Position.X), float64(obj.Position.Y))
+			vector.DrawFilledRect(screen, float32(obj.Position.X), float32(obj.Position.Y), float32(util.TileSize), float32(util.TileSize), color.RGBA{255, 50, 100, 0}, false)
+		}
+
+	}
 
 	// Draw the level tiles
 	for _, tile := range g.levelTiles {

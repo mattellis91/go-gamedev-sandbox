@@ -175,6 +175,12 @@ func (p *Player) Update() error {
 
 func (p *Player) Draw(screen *ebiten.Image) {
 	ops := &ebiten.DrawImageOptions{}
+	if(!p.FacingRight) {
+		ops.GeoM.Scale(-1, 1)
+		ops.GeoM.Translate(util.TileSize, 0)
+	} else {
+		ops.GeoM.Scale(1, 1)
+	}
 	ops.GeoM.Translate(float64(p.object.Position.X), float64(p.object.Position.Y))
 	screen.DrawImage(p.image, ops)
 }

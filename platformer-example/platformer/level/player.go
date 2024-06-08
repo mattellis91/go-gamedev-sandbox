@@ -1,7 +1,7 @@
 package level
 
 import (
-	"fmt"
+	_ "fmt"
 	"math"
 
 	"github.com/mattellis91/go-gamedev-sandbox/platformer-example/platformer/util"
@@ -20,13 +20,12 @@ type Player struct {
 	FacingRight bool
 	IgnorePlatform *resolv.Object
 	Speed *resolv.Vector
+	startingPosition *resolv.Vector
 }
 
 func NewPlayer(image *ebiten.Image, x, y float64, space *resolv.Space) *Player {
-	fmt.Printf("space: %v\n", space)
-
+	
 	playerObject := resolv.NewObject(x, y, util.TileSize, util.TileSize)
-
 	space.Add(playerObject)
 	
 	return &Player{
@@ -35,10 +34,19 @@ func NewPlayer(image *ebiten.Image, x, y float64, space *resolv.Space) *Player {
 		space: space,
 		FacingRight: true,
 		Speed: &resolv.Vector{X: 0, Y: 0},
+		startingPosition: &resolv.Vector{X: x, Y: y},
 	}
 }
 
-func (p *Player) Update() error{
+func (p *Player) Update() error {
+
+	//check for spike collision
+	if check := p.object.Check(0,0, util.SpikeEntityIdentifier); check != nil {
+		p.object.Position.X = p.startingPosition.X
+		p.object.Position.Y = p.startingPosition.Y
+		p.Speed.X = 0
+		p.Speed.Y = 0
+	}
 
 	p.Speed.Y += Gravity
 
@@ -74,7 +82,7 @@ func (p *Player) Update() error{
 	}
 
 	//check for jumping
-	if inpututil.IsKeyJustPressed(ebiten.KeyX) || inpututil.IsGamepadButtonJustPressed(0,0) {
+	if inpututil.IsKeyJustPressed(ebiten.KeyX) || inpututil.IsKeyJustPressed(ebiten.KeyUp) || inpututil.IsGamepadButtonJustPressed(0,0) {
 
 		//drop through platforms
 		if(false)  { //TODO: check for platform below
@@ -123,11 +131,7 @@ func (p *Player) Update() error{
 		checkDistance++
 	}
 
-	fmt.Printf("checkDistance: %v\n", checkDistance)
-
 	if check := p.object.Check(0, checkDistance, util.SolidTileSpaceIdentifier, "platform"); check != nil {
-
-		fmt.Printf("check: %v\n", check.Objects[0])
 
 		slide , slideOk := check.SlideAgainstCell(check.Cells[0], util.SolidTileSpaceIdentifier)
 

@@ -16,12 +16,15 @@ type Spike struct {
 }
 
 func NewSpike(image *ebiten.Image, x, y int, space *resolv.Space) *Spike {
-	space.Add(resolv.NewObject(float64(x), float64(y), util.TileSize, util.TileSize, util.PlayerEntityIdentifier))
+
+	spikeObj := resolv.NewObject(float64(x), float64(y), util.TileSize, util.TileSize, util.SpikeEntityIdentifier)
+	space.Add(spikeObj)
+
 	return &Spike{
 		image: image,
 		x: x,
 		y: y,
-		object: resolv.NewObject(float64(x), float64(y), util.TileSize, util.TileSize),
+		object: spikeObj,
 		space: space,
 	}
 }

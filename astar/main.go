@@ -27,7 +27,7 @@ func main() {
 
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("A* example (Ebitengine Demo)")
-	if err := ebiten.RunGame(&astar.Game{}); err != nil {
+	if err := ebiten.RunGame(astar.NewGame()); err != nil {
 		log.Fatal(err)
 	}
 }

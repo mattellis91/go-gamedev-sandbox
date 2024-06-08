@@ -22,7 +22,7 @@ func NewGameScene(startingLevelId string) *GameScene {
 	}
 
 	g := &GameScene{
-		CurrentLevel: level.NewGameLevel(gameData.Levels[0]),
+		CurrentLevel: level.NewGameLevel(gameData),
 	}
 	return g
 }

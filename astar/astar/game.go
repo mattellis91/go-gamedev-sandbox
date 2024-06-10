@@ -175,19 +175,25 @@ func (g *Game) Update() error {
 			if !neighborInClosedSet && !neighbor.wall {
 				
 				tempG := current.g + 1
+				newPath := false
+
 				neighborInOpenSet := NodeInSlice(neighbor, g.OpenSet)
 				if neighborInOpenSet {
 					if tempG < neighbor.g {
 						neighbor.g = tempG
+						newPath = true
 					}
 				} else {
 					neighbor.g = tempG
 					g.OpenSet = append(g.OpenSet, neighbor)
+					newPath = true
 				}
 
-				neighbor.h = EuclideanDistance(neighbor.x, neighbor.y, g.End.x, g.End.y)
-				neighbor.f = neighbor.g + neighbor.h
-				neighbor.prev = current
+				if newPath {
+					neighbor.h = EuclideanDistance(neighbor.x, neighbor.y, g.End.x, g.End.y)
+					neighbor.f = neighbor.g + neighbor.h
+					neighbor.prev = current
+				}
 
 			}
 

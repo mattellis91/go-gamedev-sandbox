@@ -16,6 +16,7 @@ const (
 	Rows 	   = 64
 	CellWidth    = ScreenWidth / Cols
 	CellHeight    = ScreenHeight / Rows
+	WallChance = 30
 )
 
 var path []*Node
@@ -36,6 +37,7 @@ type Node struct {
 	h int // cost to end node
 	neighbors []*Node
 	prev *Node
+	wall bool
 }
 
 func (n *Node) AddNeighbors(grid [][]*Node) {
@@ -65,6 +67,11 @@ func NewGame() *Game {
 		grid[i] = make([]*Node, Rows)
 		for j := range grid[i] {
 			grid[i][j] = &Node{x: i, y: j}
+
+			//chance to make node a wall
+			if rand.IntN(100) < WallChance {
+				grid[i][j].wall = true
+			}
 		}
 	}
 
@@ -84,7 +91,16 @@ func NewGame() *Game {
 		ClosedSet: []*Node{},
 	}
 
-	g.End = g.GetRandEnd()
+	endX, endY := g.GetRandColAndRow()
+	g.End = g.Grid[endX][endY]
+
+	if g.Start.wall {
+		g.Start.wall = false
+	}
+	
+	if g.End.wall {
+		g.End.wall = false
+	}
 
 	return g
 }
@@ -92,7 +108,8 @@ func NewGame() *Game {
 func (g *Game) Reset() {
 	g.OpenSet = []*Node{g.Start}
 	g.ClosedSet = []*Node{}
-	g.End = g.GetRandEnd()
+	endX, endY := g.GetRandColAndRow()
+	g.End = g.Grid[endX][endY]
 }
 
 
@@ -109,10 +126,10 @@ func NodeInSlice(node *Node, slice []*Node) bool {
 	return false
 }
 
-func (g *Game) GetRandEnd() *Node {
+func (g *Game) GetRandColAndRow() (int, int) {
 	randX := rand.IntN(Cols) + 1
 	randY := rand.IntN(Rows) + 1
-	return g.Grid[randX][randY]
+	return randX, randY
 }
 
 func (g *Game) Update() error {
@@ -155,7 +172,7 @@ func (g *Game) Update() error {
 			
 			neighborInClosedSet := NodeInSlice(neighbor, g.ClosedSet)
 
-			if !neighborInClosedSet {
+			if !neighborInClosedSet && !neighbor.wall {
 				
 				tempG := current.g + 1
 				neighborInOpenSet := NodeInSlice(neighbor, g.OpenSet)
@@ -178,6 +195,7 @@ func (g *Game) Update() error {
 
 	} else {
 		// no solution
+		return nil
 	}
 
 	return nil
@@ -193,6 +211,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			if node == g.End {
 				color.G = 0x00 
 				color.B = 0xff
+			}
+
+			//draw wall node in black
+			if node.wall {
+				color.R = 0x00
+				color.G = 0x00
+				color.B = 0x00
 			}
 
 			vector.DrawFilledRect(
@@ -261,19 +286,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 
 	//draw path
-	if path != nil {
-		for _, node := range path {
-			color := color.RGBA{0x00, 0x00, 0xff, 0xff}
-			vector.DrawFilledRect(
-				screen, 
-				float32(node.x * CellWidth), 
-				float32(node.y * CellHeight), 
-				float32(CellWidth), 
-				float32(CellHeight), 
-				color, 
-				false,
-			)
-		}
+	for _, node := range path {
+		color := color.RGBA{0x00, 0x00, 0xff, 0xff}
+		vector.DrawFilledRect(
+			screen, 
+			float32(node.x * CellWidth), 
+			float32(node.y * CellHeight), 
+			float32(CellWidth), 
+			float32(CellHeight), 
+			color, 
+			false,
+		)
 	}
-
 }

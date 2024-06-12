@@ -7,7 +7,7 @@ import (
 	"runtime/pprof"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/mattellis91/go-gamedev-sandbox/astar/astar"
+	"github.com/mattellis91/go-gamedev-sandbox/random-walk/random-walk"
 )
 
 var cpuProfile = flag.String("cpuprofile", "", "write cpu profile to file")
@@ -25,9 +25,9 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	ebiten.SetWindowSize(astar.ScreenWidth, astar.ScreenHeight)
+	ebiten.SetWindowSize(randomwalk.ScreenWidth, randomwalk.ScreenHeight)
 	ebiten.SetWindowTitle("A* example (Ebitengine Demo)")
-	if err := ebiten.RunGame(astar.NewGame()); err != nil {
+	if err := ebiten.RunGame(randomwalk.NewGame()); err != nil {
 		log.Fatal(err)
 	}
 }

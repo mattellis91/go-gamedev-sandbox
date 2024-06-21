@@ -16,7 +16,6 @@ import (
 	"github.com/solarlune/resolv"
 )
 
-
 const (
 	Friction = 0.5
 	Accel = 0.5 + Friction

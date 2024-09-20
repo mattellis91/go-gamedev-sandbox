@@ -4,6 +4,7 @@ go 1.22.2
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.7.3
+	github.com/joelschutz/stagehand v1.1.1
 	github.com/solarlune/resolv v0.7.0
 	github.com/tanema/gween v0.0.0-20221212145351-621cc8a459d1
 	github.com/tidwall/gjson v1.17.1

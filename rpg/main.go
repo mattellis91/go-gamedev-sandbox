@@ -1,15 +1,22 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"image/color"
 	"log"
 
+	"golang.org/x/image/font/gofont/goregular"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/joelschutz/stagehand"
+
+	"github.com/ebitenui/ebitenui"
+	"github.com/ebitenui/ebitenui/widget"
 )
 
 const (
@@ -41,6 +48,7 @@ func (s *BaseScene) Unload() State {
 
 type FirstScene struct {
 	BaseScene
+	ui *ebitenui.UI
 }
 
 func (s *FirstScene) Update() error {
@@ -50,12 +58,14 @@ func (s *FirstScene) Update() error {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonRight) {
 		s.sm.SwitchTo(&SecondScene{})
 	}
+	s.ui.Update()
 	return nil
 }
 
 func (s *FirstScene) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{255, 0, 0, 255}) // Fill Red
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Count: %v, WindowSize: %s", s.count, s.bounds.Max), s.bounds.Dx()/2, s.bounds.Dy()/2)
+	s.ui.Draw(screen)
 }
 
 type SecondScene struct {
@@ -99,11 +109,37 @@ func (s *ThirdScene) Draw(screen *ebiten.Image) {
 func main() {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("My Game")
-	ebiten.SetWindowResizable(true)
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	state := State(10)
 
-	s := &FirstScene{}
+	rootContainer := widget.NewContainer()
+
+	eui := &ebitenui.UI{
+		Container: rootContainer,
+	}
+
+	so, err := text.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fontFace := &text.GoTextFace{
+		Source: so,
+		Size:   32,
+	}
+	// This creates a text widget that says "Hello World!"
+	helloWorldLabel := widget.NewText(
+		widget.TextOpts.Text("Hello World!", fontFace, color.White),
+	)
+
+	// To display the text widget, we have to add it to the root container.
+	rootContainer.AddChild(helloWorldLabel)
+
+	s := &FirstScene{
+		ui: eui,
+	}
+	
 	sm := stagehand.NewSceneManager[State](s, state)
 
 	if err := ebiten.RunGame(sm); err != nil {
